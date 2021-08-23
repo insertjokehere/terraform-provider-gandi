@@ -2,6 +2,7 @@ package gandi
 
 import (
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/go-gandi/go-gandi/email"
@@ -94,8 +95,15 @@ func resourceMailboxCreate(d *schema.ResourceData, meta interface{}) (err error)
 func resourceMailboxRead(d *schema.ResourceData, meta interface{}) (err error) {
 	client := meta.(*clients).Email
 	domain := d.Get("domain").(string)
+	id := d.Id()
+	if strings.Contains(id, "/") {
+		parts := strings.SplitN(id, "/", 2)
+		domain = parts[0]
+		id = parts[1]
+		d.Set("id", id)
+	}
 
-	found, err := client.GetMailbox(domain, d.Id())
+	found, err := client.GetMailbox(domain, id)
 	if err != nil {
 		return
 	}
