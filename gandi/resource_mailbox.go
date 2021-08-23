@@ -121,6 +121,13 @@ func resourceMailboxRead(d *schema.ResourceData, meta interface{}) (err error) {
 func resourceMailboxUpdate(d *schema.ResourceData, meta interface{}) (err error) {
 	client := meta.(*clients).Email
 	domain := d.Get("domain").(string)
+	id := d.Id()
+	if strings.Contains(id, "/") {
+		parts := strings.SplitN(id, "/", 2)
+		domain = parts[0]
+		id = parts[1]
+		d.Set("id", id)
+	}
 
 	var aliases []string
 	for _, i := range d.Get("aliases").([]interface{}) {
@@ -134,14 +141,21 @@ func resourceMailboxUpdate(d *schema.ResourceData, meta interface{}) (err error)
 		Password: d.Get("password").(string),
 	}
 
-	err = client.UpdateEmail(domain, d.Id(), request)
+	err = client.UpdateEmail(domain, id, request)
 	return
 }
 
 func resourceMailboxDelete(d *schema.ResourceData, meta interface{}) (err error) {
 	client := meta.(*clients).Email
 	domain := d.Get("domain").(string)
+	id := d.Id()
+	if strings.Contains(id, "/") {
+		parts := strings.SplitN(id, "/", 2)
+		domain = parts[0]
+		id = parts[1]
+		d.Set("id", id)
+	}
 
-	err = client.DeleteEmail(domain, d.Id())
+	err = client.DeleteEmail(domain, id)
 	return
 }
