@@ -2,7 +2,7 @@ module github.com/go-gandi/terraform-provider-gandi
 
 go 1.16
 
-replace github.com/go-gandi/go-gandi => github.com/karnauskas/go-gandi v0.0.0-20201009104743-bdcf8de2b0e9
+replace github.com/go-gandi/go-gandi => github.com/insertjokehere/go-gandi v0.0.0-20210824094832-d23aaeb9ec14
 
 require (
 	github.com/fatih/color v1.9.0 // indirect
